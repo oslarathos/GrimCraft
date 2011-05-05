@@ -29,8 +29,18 @@ public class EffectRoster implements EventListenerRoster {
 	}
 	
 	public void addEffect( Effect effect ) {
-		if ( effect == null || effects.contains( effect ) )
+		if ( effect == null || effects.contains( effect ) || effect.isDestroyed() )
 			return;
+		
+		if ( effect instanceof UniqueEffect ) {
+			for ( Effect existing : new ArrayList< Effect >( effects ) ) {
+				if ( existing.getClass() == effect.getClass() ) {
+					( ( UniqueEffect ) existing ).onAttemptDuplicate( effect );
+					
+					return;
+				}
+			}
+		}
 		
 		if ( effect instanceof StackableEffect ) {
 			for ( Effect existing : new ArrayList< Effect >( effects ) ) {
@@ -84,9 +94,9 @@ public class EffectRoster implements EventListenerRoster {
 			}
 		}
 		
-		EffectEvent event = new EffectEvent( EventTrigger.EFFECT_REMOVE, effect );
+		EffectEvent event = new EffectEvent( EventTrigger.EFFECT_REMOVED, effect );
 		
-		getActor().trigger( event, new Object[] { event } );
+		getActor().trigger( event, event );
 	}
 	
 	public Effect bindEffect( Class< ? extends Effect > effectClass ) {
@@ -130,6 +140,9 @@ public class EffectRoster implements EventListenerRoster {
 		ArrayList< Effect > targets = new ArrayList< Effect >();
 		
 		if ( event instanceof ItemEvent ) {
+			if ( ( ( ItemEvent ) event ).getItem().isDestroyed() )
+				return;
+				
 			ListenLogic logic = ( ( ItemEvent ) event ).getItem().getListenLogic();
 			
 			if ( logic == ListenLogic.ListenOnly || logic == ListenLogic.Private )
@@ -139,7 +152,7 @@ public class EffectRoster implements EventListenerRoster {
 		if ( event instanceof EffectEvent ) {
 			Effect source = ( ( EffectEvent ) event ).getEffect();
 			
-			if ( !effects.contains( source ) )
+			if ( source.isDestroyed() || !effects.contains( source ) )
 				return;
 			
 			ListenLogic logic = source.getListenLogic();

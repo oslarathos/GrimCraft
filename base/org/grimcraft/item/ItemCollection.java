@@ -29,7 +29,7 @@ public class ItemCollection implements EventListenerRoster {
 	}
 	
 	public void addItem( Item item ) {
-		if ( item == null || item.getAmount() < 1 || items.contains( item ) )
+		if ( item == null || item.getAmount() < 1 || items.contains( item ) || item.isDestroyed() )
 			return;
 		
 		if ( item.getCollection() != null && item.getCollection() != this )
@@ -138,6 +138,9 @@ public class ItemCollection implements EventListenerRoster {
 		ArrayList< Item > targets = new ArrayList< Item >();
 		
 		if ( event instanceof EffectEvent ) {
+			if ( ( ( EffectEvent ) event ).getEffect().isDestroyed() )
+				return;
+			
 			ListenLogic logic = ( ( EffectEvent ) event ).getEffect().getListenLogic();
 			
 			if ( logic == ListenLogic.ListenOnly || logic == ListenLogic.Private )

@@ -9,6 +9,7 @@ public abstract class Item {
 	private Integer amount = 1;
 	private Integer maxamount = 1;
 	private ListenLogic logic = ListenLogic.Private;
+	private boolean destroyed = false;
 	
 	public final String getName() {
 		return name;
@@ -65,7 +66,11 @@ public abstract class Item {
 		if ( collection != null )
 			collection.removeItem( this );
 		
-		amount = 0;
+		destroyed = true;
+	}
+	
+	public final boolean isDestroyed() {
+		return destroyed;
 	}
 	
 	public final ItemCollection getCollection() {

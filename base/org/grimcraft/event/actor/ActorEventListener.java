@@ -1,10 +1,15 @@
 package org.grimcraft.event.actor;
 
-import org.grimcraft.actor.Actor;
 import org.grimcraft.event.interfaces.EventListener;
 
 public interface ActorEventListener extends EventListener {
-	public void onActorCreated( Actor actor );
+	public void onActorCreated( ActorEvent event );
 	
-	public void onActorRemoved( Actor actor );
+	public void onActorRemoved( ActorEvent event );
+	
+	public void onActorDeath( ActorDeathEvent event );
+	
+	public void onActorDamage( ActorDamageEvent event );
+	
+	public void onActorDamaged( ActorDamagedEvent event );
 }
