@@ -9,6 +9,7 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.grimcraft.listeners.GrimPlayerListener;
 import org.grimcraft.module.Module;
 import org.grimcraft.module.ModuleManager;
+import org.grimcraft.network.client.ConnectionManager;
 
 public class GrimCraft extends JavaPlugin {
 	private static GrimCraft instance = null;
@@ -43,6 +44,10 @@ public class GrimCraft extends JavaPlugin {
 		
 		registerEvent( Type.PLAYER_JOIN, GrimPlayerListener.getInstance() );
 		registerEvent(Type.PLAYER_QUIT, GrimPlayerListener.getInstance() );
+		
+		System.out.println( "Attempting to start network service" );
+		
+		ConnectionManager.getInstance().start();
 	}
 	
 	public void registerEvent( Type type, Listener listener) {

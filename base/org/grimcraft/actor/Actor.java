@@ -6,6 +6,7 @@ import org.bukkit.entity.Entity;
 import org.grimcraft.effect.EffectRoster;
 import org.grimcraft.event.Event;
 import org.grimcraft.event.EventTrigger;
+import org.grimcraft.event.TriggerSwitch;
 import org.grimcraft.event.actor.ActorEvent;
 import org.grimcraft.event.interfaces.EventListenerRoster;
 import org.grimcraft.item.ItemCollection;
@@ -28,8 +29,7 @@ public class Actor implements ItemContainer, EventListenerRoster {
 		
 		ActorEvent event = new ActorEvent( EventTrigger.ACTOR_CREATE, actor );
 		
-		actor.getRootListener().trigger( event );
-		ModuleManager.getInstance().trigger( event, actor );
+		TriggerSwitch.trigger( event, new Object[] { event }, actor, ModuleManager.getInstance() );
 		
 		return actor;
 	}
@@ -40,8 +40,7 @@ public class Actor implements ItemContainer, EventListenerRoster {
 						
 			ActorEvent event = new ActorEvent( EventTrigger.ACTOR_REMOVE, actor );
 			
-			actor.trigger( event );
-			ModuleManager.getInstance().trigger( event, actor );
+			TriggerSwitch.trigger( event, new Object[] { event }, actor, ModuleManager.getInstance() );
 			
 			actors.remove( entity );
 		}
