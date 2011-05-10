@@ -3,15 +3,12 @@ package org.grimcraft.actor;
 import java.util.HashMap;
 
 import org.bukkit.entity.Entity;
+import org.grimcraft.ability.AbilitySet;
 import org.grimcraft.effect.EffectRoster;
 import org.grimcraft.event.Event;
-import org.grimcraft.event.EventTrigger;
-import org.grimcraft.event.TriggerSwitch;
-import org.grimcraft.event.actor.ActorEvent;
 import org.grimcraft.event.interfaces.EventListenerRoster;
 import org.grimcraft.item.ItemCollection;
 import org.grimcraft.item.ItemContainer;
-import org.grimcraft.module.ModuleManager;
 
 public class Actor implements ItemContainer, EventListenerRoster {
 	private static HashMap< Entity, Actor > actors = new HashMap<Entity, Actor>();
@@ -27,21 +24,11 @@ public class Actor implements ItemContainer, EventListenerRoster {
 		Actor actor = new Actor( entity );
 		actors.put( entity, actor );
 		
-		ActorEvent event = new ActorEvent( EventTrigger.ACTOR_CREATE, actor );
-		
-		TriggerSwitch.trigger( event, new Object[] { event }, actor, ModuleManager.getInstance() );
-		
 		return actor;
 	}
 	
 	public static void removeActor( Entity entity ) {
 		if ( hasActor( entity ) ) {
-			Actor actor = getActor( entity );
-						
-			ActorEvent event = new ActorEvent( EventTrigger.ACTOR_REMOVE, actor );
-			
-			TriggerSwitch.trigger( event, new Object[] { event }, actor, ModuleManager.getInstance() );
-			
 			actors.remove( entity );
 		}
 	}
@@ -49,6 +36,7 @@ public class Actor implements ItemContainer, EventListenerRoster {
 	private Entity entity = null;
 	private EffectRoster effects = new EffectRoster( this );
 	private ItemCollection items = new ItemCollection( this );
+	private AbilitySet abilities = new AbilitySet( this );
 	
 	private Actor( Entity entity ) {
 		this.entity = entity;
@@ -65,11 +53,16 @@ public class Actor implements ItemContainer, EventListenerRoster {
 	public ItemCollection getInventory() {
 		return items;
 	}
+	
+	public AbilitySet getAbilities() {
+		return abilities;
+	}
 
 	@Override
 	public void trigger( Event event, Object... params ) {
 		effects.trigger( event, params );
 		items.trigger( event, params );
+		abilities.trigger( event, params );
 	}
 
 	@Override

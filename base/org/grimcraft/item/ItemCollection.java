@@ -13,6 +13,7 @@ import org.grimcraft.event.interfaces.EventListener;
 import org.grimcraft.event.interfaces.EventListenerRoster;
 import org.grimcraft.event.item.ItemEvent;
 import org.grimcraft.item.ItemContainer;
+import org.grimcraft.module.ModuleManager;
 
 public class ItemCollection implements EventListenerRoster {
 	private ItemContainer container = null;
@@ -56,6 +57,7 @@ public class ItemCollection implements EventListenerRoster {
 		}
 		
 		items.add( item );
+		item.setCollection( this );
 		
 		if ( item instanceof EventListener ) {
 			for ( EventTrigger trigger : ( ( EventListener ) item ).getTriggeredEvents() ) {
@@ -76,7 +78,8 @@ public class ItemCollection implements EventListenerRoster {
 		
 		ItemEvent event = new ItemEvent( EventTrigger.ITEM_ADDED, item );
 		
-		getRootListener().trigger( event, new Object[] { event } );
+		getRootListener().trigger( event, event );
+		ModuleManager.getInstance().trigger( event, event );
 	}
 	
 	public void removeItem( Item item ) {
@@ -85,9 +88,11 @@ public class ItemCollection implements EventListenerRoster {
 		
 		ItemEvent event = new ItemEvent( EventTrigger.ITEM_REMOVED, item );
 		
-		getRootListener().trigger( event, new Object[] { event } );
+		getRootListener().trigger( event, event );
+		ModuleManager.getInstance().trigger( event, event );
 		
 		items.remove( item );
+		item.setCollection( null );
 	}
 	
 	public boolean hasItem( Item item ) {
@@ -179,6 +184,8 @@ public class ItemCollection implements EventListenerRoster {
 					continue;
 				
 				m.invoke( item, params );
+			} catch ( NoSuchMethodException nsme ) {
+				System.out.println( "Tried to invoke non-existent '" + trigger.getTriggerMethod() + "' in " + item.getClass().getName() );
 			} catch ( Exception e ) {
 				e.printStackTrace();
 				

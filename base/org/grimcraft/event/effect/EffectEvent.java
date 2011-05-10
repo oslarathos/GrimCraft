@@ -16,5 +16,4 @@ public class EffectEvent extends Event {
 	public final Effect getEffect() {
 		return effect;
 	}
-
 }

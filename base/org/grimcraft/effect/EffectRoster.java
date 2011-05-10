@@ -13,6 +13,7 @@ import org.grimcraft.event.effect.EffectEvent;
 import org.grimcraft.event.interfaces.EventListener;
 import org.grimcraft.event.interfaces.EventListenerRoster;
 import org.grimcraft.event.item.ItemEvent;
+import org.grimcraft.module.ModuleManager;
 
 public class EffectRoster implements EventListenerRoster {
 	private Actor actor = null;
@@ -53,6 +54,7 @@ public class EffectRoster implements EventListenerRoster {
 		}
 		
 		effects.add( effect );
+		effect.setRoster( this );
 		
 		if ( effect instanceof EventListener ) {			
 			for ( EventTrigger trigger : ( ( EventListener ) effect ).getTriggeredEvents() ) {
@@ -74,7 +76,8 @@ public class EffectRoster implements EventListenerRoster {
 		
 		EffectEvent event = new EffectEvent( EventTrigger.EFFECT_ADDED, effect );
 
-		getActor().trigger( event, new Object[] { event } );
+		getActor().trigger( event, event );
+		ModuleManager.getInstance().trigger( event, event );
 	}
 	
 	public void removeEffect( Effect effect ) {
@@ -97,6 +100,7 @@ public class EffectRoster implements EventListenerRoster {
 		EffectEvent event = new EffectEvent( EventTrigger.EFFECT_REMOVED, effect );
 		
 		getActor().trigger( event, event );
+		ModuleManager.getInstance().trigger( event, event );
 	}
 	
 	public Effect bindEffect( Class< ? extends Effect > effectClass ) {
@@ -112,12 +116,8 @@ public class EffectRoster implements EventListenerRoster {
 			}
 			
 			Effect effect = construct.newInstance( new Object[] {} );
-			effect.init( this );
 			
 			addEffect( effect );
-			
-			EffectEvent event = new EffectEvent( EventTrigger.EFFECT_CREATE, effect );
-			getActor().trigger( event, new Object[] { event } );
 			
 			return effect;
 		} catch ( Exception e ) {
@@ -176,7 +176,7 @@ public class EffectRoster implements EventListenerRoster {
 				
 				effectMethod.invoke( effect, params );
 			} catch ( NoSuchMethodException nsme ) {
-				System.out.println( "Missing method: " + effect.getClass().getCanonicalName() + "." + trigger.getTriggerMethod() );
+				System.out.println( "Tried to invoke non-existent " + trigger.getTriggerMethod() + " in " + effect.getClass().getName() );
 			} catch ( Exception e ) {
 				e.printStackTrace();
 			}

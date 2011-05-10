@@ -9,7 +9,6 @@ import org.bukkit.plugin.java.JavaPlugin;
 import org.grimcraft.listeners.GrimPlayerListener;
 import org.grimcraft.module.Module;
 import org.grimcraft.module.ModuleManager;
-import org.grimcraft.network.client.ConnectionManager;
 
 public class GrimCraft extends JavaPlugin {
 	private static GrimCraft instance = null;
@@ -32,6 +31,8 @@ public class GrimCraft extends JavaPlugin {
 		if ( !getDataFolder().exists() )
 			getDataFolder().mkdir();
 		
+		System.out.println( "Attempting to load GrimCraft assets..." );
+		
 		ResourceLoader.getLoader().loadResources();
 		
 		ArrayList< Module > modules = ModuleManager.getInstance().getModules();
@@ -42,12 +43,16 @@ public class GrimCraft extends JavaPlugin {
 			System.out.println( "A total of " + modules.size() + " GrimCraft modules have been loaded." );
 		}
 		
+		System.out.println( "Registering player events..." );
 		registerEvent( Type.PLAYER_JOIN, GrimPlayerListener.getInstance() );
-		registerEvent(Type.PLAYER_QUIT, GrimPlayerListener.getInstance() );
+		registerEvent( Type.PLAYER_QUIT, GrimPlayerListener.getInstance() );
+		registerEvent( Type.PLAYER_COMMAND_PREPROCESS, GrimPlayerListener.getInstance() );
+		
+		System.out.println( "Registering entity events..." );
+		registerEvent( Type.ENTITY_DAMAGE, GrimPlayerListener.getInstance() );
+		
 		
 		System.out.println( "Attempting to start network service" );
-		
-		ConnectionManager.getInstance().start();
 	}
 	
 	public void registerEvent( Type type, Listener listener) {

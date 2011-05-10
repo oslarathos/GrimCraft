@@ -1,1 +1,7 @@
-Grimcraft is an advanced RPG modification for minecraft servers.
+Grimcraft is an advanced framework for adding RPG elements to multiplayer minecraft servers.
+
+Grimcraft features:
+	Abilities: Activated abilities
+	Items: Additional items handled in a secondary inventory system
+	Effects: Passive effects that are triggered by certain events
+	Modules: GrimCraft-type plugins to run additional features

@@ -8,7 +8,6 @@ public interface EffectEventListener extends EventListener {
 	
 	public void onEffectDestroyed( Effect effect );
 	
-	
 	public void onEffectAdded( EffectEvent event );
 	
 	public void onEffectRemoved( EffectEvent event );

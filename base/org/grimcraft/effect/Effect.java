@@ -3,51 +3,20 @@ package org.grimcraft.effect;
 import org.grimcraft.event.EventTrigger;
 import org.grimcraft.event.ListenLogic;
 import org.grimcraft.event.effect.EffectEvent;
+import org.grimcraft.misc.Saveable;
+import org.grimcraft.misc.Visible;
 
-public abstract class Effect {
-	private String name = "Misc Effect";
-	private String desc = "Misc Effect";
+public abstract class Effect extends Visible implements Saveable {
 	private EffectRoster roster = null;
 	private ListenLogic logic = ListenLogic.Private;
 	private boolean destroyed = false;
-	
-	protected final void init( EffectRoster roster ) {
-		this.roster = roster;
-	}
-	
-	public String getName() {
-		return name;
-	}
-	
-	public void setName( String name ) {
-		this.name = name;
-	}
-	
-	public String getDescription() {
-		return desc;
-	}
-	
-	public void setDescription( String desc ) {
-		this.desc = desc;
-	}
-	
+		
 	public final EffectRoster getRoster() {
 		return roster;
 	}
 	
 	public final void setRoster( EffectRoster newRoster ) {
-		if ( newRoster == null ) {
-			destroyEffect();
-			
-			return;
-		}
-		
-		if ( roster != null ) {
-			roster.removeEffect( this );
-		}
-		
 		roster = newRoster;
-		newRoster.addEffect( this );
 	}
 	
 	public final void destroyEffect() {
@@ -59,6 +28,8 @@ public abstract class Effect {
 			destroyed = true;
 			
 			roster.removeEffect( this );
+		} else {
+			destroyed = true;
 		}
 	}
 	

@@ -1,37 +1,15 @@
 package org.grimcraft.item;
 
 import org.grimcraft.event.ListenLogic;
+import org.grimcraft.misc.Saveable;
+import org.grimcraft.misc.Visible;
 
-public abstract class Item {
-	private String name = "Misc Item";
-	private String desc = "Misc Item";
+public abstract class Item extends Visible implements Saveable {
 	private ItemCollection collection = null;
 	private Integer amount = 1;
 	private Integer maxamount = 1;
 	private ListenLogic logic = ListenLogic.Private;
 	private boolean destroyed = false;
-	
-	public final String getName() {
-		return name;
-	}
-	
-	public final void setName( String name ) {
-		if ( name == null )
-			return;
-		
-		this.name = name;
-	}
-	
-	public final String getDescription() {
-		return desc;
-	}
-	
-	public final void setDescription( String desc ) {
-		if ( desc == null )
-			return;
-		
-		this.desc = desc;
-	}
 	
 	public final Integer getMaximumAmount() {
 		return maxamount;
@@ -50,6 +28,20 @@ public abstract class Item {
 			return;
 		else if ( amount == 0 )
 			destroyItem();
+		else if ( amount > getMaximumAmount() ) {
+			amount -= getMaximumAmount() - amount;
+			this.amount = getMaximumAmount();
+			
+			try {
+				Item item = this.getClass().getConstructor().newInstance();
+				
+				item.setAmount( amount );
+				
+				
+			} catch ( Exception e ) {
+				e.printStackTrace();
+			}
+		}
 		else
 			this.amount = amount;
 	}
@@ -78,18 +70,7 @@ public abstract class Item {
 	}
 	
 	public final void setCollection( ItemCollection newCollection ) {
-		if ( newCollection == null ) {
-			destroyItem();
-			
-			return;
-		}
-		
-		if ( collection != null ) {
-			collection.removeItem( this );
-		}
-		
 		collection = newCollection;
-		newCollection.addItem( this );
 	}
 	
 	public abstract void onActivate();
