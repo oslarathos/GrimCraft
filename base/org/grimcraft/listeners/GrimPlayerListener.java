@@ -1,6 +1,6 @@
 package org.grimcraft.listeners;
 
-import org.bukkit.event.player.PlayerChatEvent;
+import org.bukkit.event.player.PlayerCommandPreprocessEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -39,17 +39,5 @@ public class GrimPlayerListener extends PlayerListener {
 		
 		ModuleManager.getInstance().trigger( actorevent, actorevent );
 		actor.trigger( actorevent, actorevent );
-	}
-	
-	public void onPlayerCommandPreprocess( PlayerChatEvent event ) {
-		if ( !event.getMessage().startsWith( "/" ) )
-			return;
-		
-		Actor actor = Actor.getActor( event.getPlayer() );
-		
-		PlayerCommandEvent playerevent = new PlayerCommandEvent( event.getPlayer(), event.getMessage() );
-		
-		actor.trigger( playerevent, playerevent );
-		ModuleManager.getInstance().trigger( playerevent, playerevent );
 	}
 }

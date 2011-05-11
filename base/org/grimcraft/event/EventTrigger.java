@@ -35,7 +35,7 @@ public enum EventTrigger {
 	MODULE_ENABLE( ModuleEventListener.class, "onModuleEnabled", Module.class ),
 	MODULE_DISABLE( ModuleEventListener.class, "onModuleDisabled", Module.class ),
 	
-	PLAYER_COMMAND( PlayerEventListener.class, "onPlayerCommand", PlayerCommandEvent.class ),
+	PLAYER_COMMAND( PlayerEventListener.class, "onPlayerCommand", PlayerCommandEvent.class, String[].class ),
 	
 	ACTOR_CREATE( ActorEventListener.class, "onActorCreated", ActorEvent.class ),
 	ACTOR_REMOVE( ActorEventListener.class, "onActorRemoved", ActorEvent.class ),

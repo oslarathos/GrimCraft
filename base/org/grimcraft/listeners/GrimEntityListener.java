@@ -12,9 +12,9 @@ import org.grimcraft.event.actor.ActorDeathEvent;
 import org.grimcraft.module.ModuleManager;
 
 public class GrimEntityListener extends EntityListener {
-	private GrimEntityListener instance = new GrimEntityListener();
+	private static GrimEntityListener instance = new GrimEntityListener();
 	
-	public GrimEntityListener getInstance() {
+	public static GrimEntityListener getInstance() {
 		return instance;
 	}
 	

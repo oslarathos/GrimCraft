@@ -14,5 +14,5 @@ public abstract class Ability extends Visible implements Saveable {
 		abilities = abilityset;
 	}
 	
-	public abstract void onActivate();
+	public abstract void onActivate( String... params );
 }

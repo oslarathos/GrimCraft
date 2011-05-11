@@ -7,6 +7,7 @@ import org.grimcraft.event.EventTrigger;
 public class PlayerCommandEvent extends Event {
 	private Player player;
 	private String command;
+	private boolean parsed = false;
 	
 	public PlayerCommandEvent( Player player, String command ) {
 		super( EventTrigger.PLAYER_COMMAND );
@@ -21,5 +22,13 @@ public class PlayerCommandEvent extends Event {
 	
 	public String getCommand() {
 		return command;
+	}
+	
+	public void setParsed() {
+		parsed = true;
+	}
+	
+	public boolean isParsed() {
+		return parsed;
 	}
 }
