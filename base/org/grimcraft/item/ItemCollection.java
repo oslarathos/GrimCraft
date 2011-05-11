@@ -128,7 +128,7 @@ public class ItemCollection implements EventListenerRoster {
 	}
 	
 	public ArrayList< Item > asList() {
-		return new ArrayList<Item>( items );
+		return new ArrayList< Item >( items );
 	}
 	
 	@Override

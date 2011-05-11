@@ -33,11 +33,27 @@ public class GrimPlayerListener extends PlayerListener {
 	public void onPlayerQuit( PlayerQuitEvent event ) {
 		Actor actor = Actor.getActor( event.getPlayer() );
 		
-		Actor.removeActor( event.getPlayer() );
-		
 		ActorEvent actorevent = new ActorEvent( EventTrigger.ACTOR_REMOVE, actor );
 		
 		ModuleManager.getInstance().trigger( actorevent, actorevent );
 		actor.trigger( actorevent, actorevent );
+		
+		Actor.removeActor( event.getPlayer() );
+	}
+	
+	public void onPlayerCommandPreprocess( PlayerCommandPreprocessEvent event ) {
+		String[] split = event.getMessage().split( " " );
+		
+		PlayerCommandEvent playerEvent = new PlayerCommandEvent( event.getPlayer(), split[ 0 ].toLowerCase() );
+    	
+		String[] args = new String[ split.length - 1 ];
+		
+		for ( int i = 1; i < split.length; i++ ) {
+			args[ i - 1 ] = split[ i ];
+		}
+		
+    	ModuleManager.getInstance().trigger( playerEvent, playerEvent, args );
+    	
+    	event.setCancelled( playerEvent.isParsed() );
 	}
 }

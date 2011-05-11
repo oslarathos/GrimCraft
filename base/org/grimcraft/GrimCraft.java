@@ -2,14 +2,10 @@ package org.grimcraft;
 
 import java.util.ArrayList;
 
-import org.bukkit.command.Command;
-import org.bukkit.command.CommandSender;
-import org.bukkit.entity.Player;
 import org.bukkit.event.Event.Priority;
 import org.bukkit.event.Event.Type;
 import org.bukkit.event.Listener;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.grimcraft.event.player.PlayerCommandEvent;
 import org.grimcraft.listeners.GrimEntityListener;
 import org.grimcraft.listeners.GrimPlayerListener;
 import org.grimcraft.module.Module;
@@ -55,23 +51,8 @@ public class GrimCraft extends JavaPlugin {
 		
 		System.out.println( "Registering entity events..." );
 		registerEvent( Type.ENTITY_DAMAGE, GrimEntityListener.getInstance() );
-		
-		
-		System.out.println( "Attempting to start network service" );
 	}
-	
-	public boolean onCommand(CommandSender sender, Command command, String label, String[] args) {
-        if ( sender instanceof Player ) {
-        	PlayerCommandEvent event = new PlayerCommandEvent( ( Player ) sender, command.getName().toLowerCase() );
-        	
-        	ModuleManager.getInstance().trigger( event, event, args );
-        	
-        	return event.isParsed();
-        }
-        
-        return false;
-    }
-	
+		
 	public void registerEvent( Type type, Listener listener) {
 		System.out.println( type.name() + " => " + listener.getClass().getName() );
 		

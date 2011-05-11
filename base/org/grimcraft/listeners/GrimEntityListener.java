@@ -34,7 +34,7 @@ public class GrimEntityListener extends EntityListener {
 			if ( Actor.hasActor( source ) ) {
 				Actor actor = Actor.getActor( source );
 				ActorDamageEvent damageEvent = new ActorDamageEvent( actor, ( EntityDamageByEntityEvent ) event );
-				
+								
 				actor.trigger( damageEvent, damageEvent );
 			}
 		}

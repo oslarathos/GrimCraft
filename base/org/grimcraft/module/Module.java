@@ -2,7 +2,7 @@ package org.grimcraft.module;
 
 import java.io.File;
 
-public abstract class Module {
+public abstract class Module {	
 	private String name = "Module Name";
 	private String desc = "Module Description";
 	private boolean enabled = false;

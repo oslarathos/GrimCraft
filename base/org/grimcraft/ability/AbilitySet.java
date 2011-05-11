@@ -26,6 +26,10 @@ public class AbilitySet implements EventListenerRoster {
 		this.actor = actor;
 	}
 	
+	public Actor getActor() {
+		return actor;
+	}
+	
 	public void addAbility( Ability ability ) {
 		if ( ability == null || abilities.contains( ability ) )
 			return;
@@ -82,6 +86,19 @@ public class AbilitySet implements EventListenerRoster {
 		
 		actor.trigger( event, event );
 		ModuleManager.getInstance().trigger( event, event );
+	}
+	
+	public ArrayList< Ability > getAbilities() {
+		return new ArrayList< Ability >( abilities );
+	}
+	
+	public Ability getAbility( String name ) {
+		for ( Ability ability : abilities ) {
+			if ( ability.getName().equalsIgnoreCase( name ) )
+				return ability;
+		}
+		
+		return null;
 	}
 	
 	@Override

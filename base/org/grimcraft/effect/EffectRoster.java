@@ -58,8 +58,11 @@ public class EffectRoster implements EventListenerRoster {
 		
 		if ( effect instanceof EventListener ) {			
 			for ( EventTrigger trigger : ( ( EventListener ) effect ).getTriggeredEvents() ) {
-				if ( trigger.getTriggerClass().isAssignableFrom( effect.getClass() ) )
+				if ( !trigger.getTriggerClass().isAssignableFrom( effect.getClass() ) ) {
+					System.out.println( trigger.getTriggerClass().getName() + " is not assignable from " + effect.getClass().getName() );
+					
 					continue;
+				}
 				
 				ArrayList< Effect > list = triggers.get( trigger );
 				
@@ -103,6 +106,10 @@ public class EffectRoster implements EventListenerRoster {
 		ModuleManager.getInstance().trigger( event, event );
 	}
 	
+	public ArrayList< Effect > asList() {
+		return new ArrayList< Effect >( effects );
+	}
+	
 	public Effect bindEffect( Class< ? extends Effect > effectClass ) {
 		if ( effectClass == null )
 			throw new NullPointerException( "Tried to bind a null class to an effect roster." );
@@ -132,8 +139,7 @@ public class EffectRoster implements EventListenerRoster {
 		if ( event == null || !triggers.containsKey( event.getTrigger() ) )
 			return;
 		
-		if ( params == null )
-			params = new Object[] {};
+		System.out.println( "Event received: " + event.getTrigger().name() );
 		
 		EventTrigger trigger = event.getTrigger();
 	
@@ -158,15 +164,23 @@ public class EffectRoster implements EventListenerRoster {
 			ListenLogic logic = source.getListenLogic();
 						
 			if ( logic == ListenLogic.EmitOnly || logic == ListenLogic.Public ) {
-				targets.addAll( triggers.get( trigger ) );
-			} else {
-				targets.add( source );
+				for ( Effect effect : effects ) {
+					if ( effect != source && !effect.isDestroyed() ) {
+						if ( effect.getListenLogic() == ListenLogic.EmitOnly || effect.getListenLogic() == ListenLogic.Private )
+							continue;
+						
+						targets.add( effect );
+					}
+				}
 			}
+			
+			targets.add( source );
 		} else {
 			targets.addAll( triggers.get( trigger ) );
 		}
 		
 		for ( Effect effect : targets ) {
+			System.out.println( "Sending event to: " + effect.getName() );
 			try {
 				Method effectMethod = 
 					effect.getClass().getDeclaredMethod(
