@@ -1,6 +1,8 @@
 package org.grimcraft.listeners;
 
+import org.bukkit.event.block.Action;
 import org.bukkit.event.player.PlayerCommandPreprocessEvent;
+import org.bukkit.event.player.PlayerInteractEvent;
 import org.bukkit.event.player.PlayerJoinEvent;
 import org.bukkit.event.player.PlayerListener;
 import org.bukkit.event.player.PlayerQuitEvent;
@@ -8,6 +10,7 @@ import org.grimcraft.actor.Actor;
 import org.grimcraft.event.EventTrigger;
 import org.grimcraft.event.actor.ActorEvent;
 import org.grimcraft.event.player.PlayerCommandEvent;
+import org.grimcraft.event.player.PlayerRightClickEvent;
 import org.grimcraft.module.ModuleManager;
 
 public class GrimPlayerListener extends PlayerListener {
@@ -40,6 +43,17 @@ public class GrimPlayerListener extends PlayerListener {
 		
 		Actor.removeActor( event.getPlayer() );
 	}
+	
+	public void onPlayerInteract( PlayerInteractEvent event ) {
+		if ( event.getAction() == Action.RIGHT_CLICK_BLOCK ) {
+			PlayerRightClickEvent grimEvent = new PlayerRightClickEvent( event.getPlayer(), event.getClickedBlock() );
+			
+			ModuleManager.getInstance().trigger( grimEvent, grimEvent );
+			Actor.getActor(event.getPlayer()).trigger( grimEvent, grimEvent );
+			
+			event.setCancelled( grimEvent.isCancelled() );
+		}
+    }
 	
 	public void onPlayerCommandPreprocess( PlayerCommandPreprocessEvent event ) {
 		String[] split = event.getMessage().split( " " );

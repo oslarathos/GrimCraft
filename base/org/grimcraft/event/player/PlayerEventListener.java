@@ -5,4 +5,6 @@ import org.grimcraft.event.interfaces.EventListener;
 
 public interface PlayerEventListener extends EventListener {
 	public void onPlayerCommand( PlayerCommandEvent event, String[] args );
+	
+	public void onPlayerRightClick( PlayerRightClickEvent event );
 }

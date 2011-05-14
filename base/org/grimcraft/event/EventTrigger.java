@@ -1,5 +1,6 @@
 package org.grimcraft.event;
 
+import org.bukkit.event.block.BlockBreakEvent;
 import org.grimcraft.effect.StackableEffect;
 import org.grimcraft.event.ability.AbilityEvent;
 import org.grimcraft.event.ability.AbilityEventListener;
@@ -8,16 +9,21 @@ import org.grimcraft.event.actor.ActorDamagedEvent;
 import org.grimcraft.event.actor.ActorDeathEvent;
 import org.grimcraft.event.actor.ActorEvent;
 import org.grimcraft.event.actor.ActorEventListener;
+import org.grimcraft.event.block.BlockEventListener;
+import org.grimcraft.event.block.BlockPlace_GrimEvent;
 import org.grimcraft.event.effect.EffectEvent;
 import org.grimcraft.event.effect.EffectEventListener;
 import org.grimcraft.event.item.ItemEvent;
 import org.grimcraft.event.item.ItemEventListener;
 import org.grimcraft.event.module.ModuleEventListener;
+import org.grimcraft.event.player.PlayerRightClickEvent;
 import org.grimcraft.event.player.PlayerCommandEvent;
 import org.grimcraft.event.player.PlayerEventListener;
 import org.grimcraft.module.Module;
 
 public enum EventTrigger {
+	BLOCK_BREAK( BlockEventListener.class, "onBlockBreak", BlockBreakEvent.class ),
+	BLOCK_PLACE( BlockEventListener.class, "onBlockPlace", BlockPlace_GrimEvent.class ),
 	
 	EFFECT_CREATE( EffectEventListener.class, "onEffectCreated", EffectEvent.class ),
 	EFFECT_DESTROY( EffectEventListener.class, "onEffectDestroyed", EffectEvent.class ),
@@ -36,6 +42,7 @@ public enum EventTrigger {
 	MODULE_DISABLE( ModuleEventListener.class, "onModuleDisabled", Module.class ),
 	
 	PLAYER_COMMAND( PlayerEventListener.class, "onPlayerCommand", PlayerCommandEvent.class, String[].class ),
+	PLAYER_RIGHTCLICK( PlayerEventListener.class, "onPlayerRightClick", PlayerRightClickEvent.class ),
 	
 	ACTOR_CREATE( ActorEventListener.class, "onActorCreated", ActorEvent.class ),
 	ACTOR_REMOVE( ActorEventListener.class, "onActorRemoved", ActorEvent.class ),

@@ -47,6 +47,7 @@ public class GrimCraft extends JavaPlugin {
 		System.out.println( "Registering player events..." );
 		registerEvent( Type.PLAYER_JOIN, GrimPlayerListener.getInstance() );
 		registerEvent( Type.PLAYER_QUIT, GrimPlayerListener.getInstance() );
+		registerEvent( Type.PLAYER_INTERACT, GrimPlayerListener.getInstance() );
 		registerEvent( Type.PLAYER_COMMAND_PREPROCESS, GrimPlayerListener.getInstance() );
 		
 		System.out.println( "Registering entity events..." );

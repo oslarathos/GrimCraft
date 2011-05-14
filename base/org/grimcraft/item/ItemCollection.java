@@ -38,17 +38,15 @@ public class ItemCollection implements EventListenerRoster {
 			
 		for ( Item existing : items ) {
 			if ( existing.getClass() == item.getClass() ) {
-				int amount = existing.getMaximumAmount() - existing.getAmount();
+				int availableSpace = existing.getMaximumAmount() - existing.getAmount();
 				
-				if ( amount != 0 ) {
-					if ( amount < item.getAmount() ) {
+				if ( availableSpace != 0 ) {
+					if ( availableSpace < item.getAmount() ) {
 						existing.setAmount( existing.getMaximumAmount() );
 						
-						item.setAmount( item.getAmount() - amount );
+						item.setAmount( item.getAmount() - availableSpace );
 					} else {
-						amount -= item.getAmount();
-						
-						existing.setAmount( existing.getAmount() + amount );
+						existing.setAmount( existing.getAmount() + item.getAmount() );
 						
 						return;
 					}
